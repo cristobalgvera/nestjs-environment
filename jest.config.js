@@ -2,6 +2,7 @@ const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('./tsconfig');
 
 const COVERAGE_FILE_SUFFIX = [
+  'module',
   'service',
   'util',
   'provider',
