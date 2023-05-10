@@ -1,5 +1,4 @@
 export class EnvironmentBase {
-  NODE_ENV: 'development' | 'test' | 'production';
+  NODE_ENV: string;
   PORT: number;
-  ENABLE_SWAGGER: boolean;
 }
