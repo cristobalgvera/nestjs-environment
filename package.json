@@ -2,6 +2,7 @@
   "name": "@cristobalgvera/nestjs-environment",
   "version": "0.1.1",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
+  "description": "Environment module configuration library that allows you to easily setup and validate your environment with minimal configuration.",
   "private": false,
   "license": "MIT",
   "main": "dist/index.js",
@@ -60,5 +61,13 @@
   "keywords": [
     "nestjs",
     "environment"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristobalgvera/nestjs-environment"
+  },
+  "homepage": "https://github.com/cristobalgvera/nestjs-environment"
 }
