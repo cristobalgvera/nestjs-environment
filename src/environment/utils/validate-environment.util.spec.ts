@@ -1,8 +1,15 @@
 import { createMock } from '@golevelup/ts-jest';
+import { plainToInstance } from 'class-transformer';
 import * as Joi from 'joi';
-import * as underTest from './validate.util';
+import * as underTest from './validate-environment.util';
 
-describe('validate', () => {
+jest.mock('class-transformer', () => ({
+  plainToInstance: jest.fn(),
+}));
+
+const mockPlainToInstance = jest.mocked(plainToInstance);
+
+describe('ValidateEnvironment', () => {
   let validationSchema: Joi.ObjectSchema<any>;
 
   beforeEach(() => {
@@ -17,12 +24,29 @@ describe('validate', () => {
     jest.clearAllMocks();
   });
 
+  it('should transform the configuration to the environment class', () => {
+    const expectedConfiguration = { config: 'config' };
+    const expectedClass = { foo: 'bar' };
+
+    underTest.validateEnvironment({
+      configuration: expectedConfiguration,
+      environmentClass: expectedClass,
+      validationSchema,
+    });
+
+    expect(mockPlainToInstance).toHaveBeenCalledWith<
+      Parameters<typeof plainToInstance>
+    >(expectedClass as any, expectedConfiguration);
+  });
+
   it('should validate the transformed configuration against the schema', () => {
     const expected = { config: 'config' };
 
+    mockPlainToInstance.mockReturnValueOnce(expected);
+
     const validationSchemaSpy = jest.spyOn(validationSchema, 'validate');
 
-    underTest.validateEnvironment(expected, validationSchema);
+    underTest.validateEnvironment({ validationSchema } as any);
 
     expect(validationSchemaSpy).toHaveBeenCalledWith(
       expected,
@@ -42,7 +66,7 @@ describe('validate', () => {
         value: expected,
       } as any);
 
-      const actual = underTest.validateEnvironment({} as any, validationSchema);
+      const actual = underTest.validateEnvironment({ validationSchema } as any);
 
       expect(actual).toEqual(expected);
     });
@@ -58,9 +82,9 @@ describe('validate', () => {
       } as any);
 
       expect(() =>
-        underTest.validateEnvironment({} as any, validationSchema),
+        underTest.validateEnvironment({ validationSchema } as any),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"validation_message, using environment: {}"`,
+        `"validation_message, using environment: undefined"`,
       );
     });
   });

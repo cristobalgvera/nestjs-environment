@@ -1,12 +1,13 @@
 {
   "name": "@cristobalgvera/nestjs-environment",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
   "private": false,
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --check --ignore-unknown --write",

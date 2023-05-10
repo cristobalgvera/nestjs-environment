@@ -15,7 +15,7 @@ module.exports = {
   coverageDirectory: './coverage',
   testEnvironment: 'node',
   // Helps to use aliases in tsconfig (@module/*)
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths ?? {}, {
     prefix: '<rootDir>',
   }),
 };

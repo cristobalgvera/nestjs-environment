@@ -2,6 +2,7 @@ import { DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CoreEnvironmentModule as underTest } from './core-environment.module';
 import { EnvironmentService } from './environment.service';
+import { validateEnvironment } from './utils';
 
 jest.mock('@nestjs/config', () => ({
   ConfigModule: {
@@ -9,7 +10,10 @@ jest.mock('@nestjs/config', () => ({
   },
 }));
 
+jest.mock('./utils');
+
 const mockConfigModuleForRoot = jest.mocked(ConfigModule.forRoot);
+const mockValidateEnvironment = jest.mocked(validateEnvironment);
 
 describe('CoreEnvironmentModule', () => {
   afterEach(() => {
@@ -41,15 +45,34 @@ describe('CoreEnvironmentModule', () => {
 
     describe('when creating the ConfigModule', () => {
       it('should call ConfigModule with the proper arguments', () => {
-        const expectedValidate = { foo: 'bar' };
-
-        underTest.forRoot({
-          validate: expectedValidate as any,
-        });
+        underTest.forRoot({} as any);
 
         expect(mockConfigModuleForRoot).toHaveBeenCalledWith({
           cache: true,
-          validate: expectedValidate,
+          validate: expect.any(Function),
+        });
+      });
+
+      it('should call validateEnvironment with the proper arguments', () => {
+        const expectedConfiguration = { foo: 'config' };
+        const expectedEnvironmentClass = { foo: 'class' };
+        const expectedValidationSchema = { bar: 'validation_schema' };
+
+        mockConfigModuleForRoot.mockImplementationOnce(
+          (opts) => opts?.validate?.(expectedConfiguration) as any,
+        );
+
+        underTest.forRoot({
+          environmentClass: expectedEnvironmentClass as any,
+          validationSchema: expectedValidationSchema as any,
+        });
+
+        expect(mockValidateEnvironment).toHaveBeenCalledWith<
+          Parameters<typeof validateEnvironment>
+        >({
+          configuration: expectedConfiguration,
+          environmentClass: expectedEnvironmentClass,
+          validationSchema: expectedValidationSchema,
         });
       });
     });
