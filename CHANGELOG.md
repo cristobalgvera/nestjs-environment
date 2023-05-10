@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.1.3
+
+### Patch Changes
+
+- 91894f9: Add actions write permissions to CI workflow.
+
 ## 0.1.2
 
 ### Patch Changes
