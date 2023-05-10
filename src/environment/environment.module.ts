@@ -6,7 +6,7 @@ import { CoreEnvironmentModuleOptions } from './types';
 import { validateEnvironment } from './utils';
 
 @Module({})
-export class CoreEnvironmentModule {
+export class EnvironmentModule {
   static forRoot<TEnvironment extends BaseEnvironment>(
     options: CoreEnvironmentModuleOptions<TEnvironment>,
   ): DynamicModule {
@@ -23,7 +23,7 @@ export class CoreEnvironmentModule {
     });
 
     return {
-      module: CoreEnvironmentModule,
+      module: EnvironmentModule,
       global: true,
       imports: [ValidatedConfigModule],
       providers: [EnvironmentService],

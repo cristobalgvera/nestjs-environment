@@ -1,6 +1,6 @@
 import { DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CoreEnvironmentModule as underTest } from './core-environment.module';
+import { EnvironmentModule as underTest } from './environment.module';
 import { EnvironmentService } from './environment.service';
 import { validateEnvironment } from './utils';
 
@@ -15,7 +15,7 @@ jest.mock('./utils');
 const mockConfigModuleForRoot = jest.mocked(ConfigModule.forRoot);
 const mockValidateEnvironment = jest.mocked(validateEnvironment);
 
-describe('CoreEnvironmentModule', () => {
+describe('EnvironmentModule', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -71,8 +71,8 @@ describe('CoreEnvironmentModule', () => {
           Parameters<typeof validateEnvironment>
         >({
           configuration: expectedConfiguration,
-          environmentClass: expectedEnvironmentClass,
-          validationSchema: expectedValidationSchema,
+          environmentClass: expectedEnvironmentClass as any,
+          validationSchema: expectedValidationSchema as any,
         });
       });
     });

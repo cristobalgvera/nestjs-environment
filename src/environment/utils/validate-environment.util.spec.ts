@@ -30,7 +30,7 @@ describe('ValidateEnvironment', () => {
 
     underTest.validateEnvironment({
       configuration: expectedConfiguration,
-      environmentClass: expectedClass,
+      environmentClass: expectedClass as any,
       validationSchema,
     });
 
