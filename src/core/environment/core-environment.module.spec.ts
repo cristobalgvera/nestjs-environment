@@ -9,10 +9,6 @@ jest.mock('@nestjs/config', () => ({
   },
 }));
 
-jest.mock('./validation', () => ({
-  validateEnvironment: jest.fn(),
-}));
-
 const mockConfigModuleForRoot = jest.mocked(ConfigModule.forRoot);
 
 describe('CoreEnvironmentModule', () => {

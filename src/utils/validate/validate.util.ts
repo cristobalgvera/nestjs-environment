@@ -1,5 +1,5 @@
-import { BaseEnvironment } from '../environment.type';
-import { EnvironmentSchema } from '../types';
+import { BaseEnvironment } from '@core/environment';
+import { EnvironmentSchema } from './types';
 
 export function validateEnvironment<TEnvironment extends BaseEnvironment>(
   environment: TEnvironment,
