@@ -5,24 +5,25 @@ import { EnvironmentBase, EnvironmentClass, EnvironmentSchema } from './types';
 import { validateEnvironment } from './validation';
 
 @Module({})
-export class EnvironmentModule {
-  static register<TEnvironment extends EnvironmentBase = EnvironmentBase>(
+export class CoreEnvironmentModule {
+  static forRoot<TEnvironment extends EnvironmentBase = EnvironmentBase>(
     EnvironmentClass: EnvironmentClass<TEnvironment>,
     environmentSchema: EnvironmentSchema<TEnvironment>,
   ): DynamicModule {
+    const ValidatedConfigModule = ConfigModule.forRoot({
+      cache: true,
+      validate: (environmentValues) =>
+        validateEnvironment<TEnvironment>(
+          environmentValues,
+          EnvironmentClass,
+          environmentSchema,
+        ),
+    });
+
     return {
-      module: EnvironmentModule,
-      imports: [
-        ConfigModule.forRoot({
-          validate: (environmentValues) =>
-            validateEnvironment<TEnvironment>(
-              environmentValues,
-              EnvironmentClass,
-              environmentSchema,
-            ),
-          cache: true,
-        }),
-      ],
+      module: CoreEnvironmentModule,
+      global: true,
+      imports: [ValidatedConfigModule],
       providers: [EnvironmentService],
       exports: [EnvironmentService],
     };
