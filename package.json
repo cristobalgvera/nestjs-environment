@@ -1,6 +1,6 @@
 {
   "name": "@cristobalgvera/nestjs-environment",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
   "private": false,
   "license": "MIT",
