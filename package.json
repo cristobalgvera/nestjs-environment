@@ -1,6 +1,6 @@
 {
   "name": "@cristobalgvera/nestjs-environment",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
   "private": false,
   "license": "MIT",
@@ -56,5 +56,9 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "4.2.0",
     "typescript": "^5.0.4"
-  }
+  },
+  "keywords": [
+    "nestjs",
+    "environment"
+  ]
 }

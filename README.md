@@ -1,73 +1,197 @@
+# NestJS Environment
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank">
+    <img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" />
+  </a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Environment module configuration library that allows you to easily setup
+and validate your environment with minimal configuration.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Type safe environment usage.
+- Complex environments variables (arrays and objects) validation.
 
 ## Installation
 
 ```bash
-$ yarn install
+npm install @cristobalgvera/nestjs-environment
 ```
 
-## Running the app
+## Usage
 
-```bash
-# development
-$ yarn run start
+The most basic usage possible is the following:
 
-# watch mode
-$ yarn run start:dev
+1. Create the `Environment` class. It needs to implements `BaseEnvironment`.
 
-# production mode
-$ yarn run start:prod
-```
+   ```ts
+   // environment/environment.model.ts
 
-## Test
+   import { BaseEnvironment } from '@cristobalgvera/nestjs-environment';
 
-```bash
-# unit tests
-$ yarn run test
+   export class Environment implements BaseEnvironment {
+     NODE_ENV: string;
+     PORT: number;
+   }
+   ```
 
-# e2e tests
-$ yarn run test:e2e
+1. Create a validation schema for that `Environment` using `Joi`. Remember to
+   create the test file too.
 
-# test coverage
-$ yarn run test:cov
-```
+   ```ts
+   // environment/environment.schema.ts
 
-## Support
+   import * as Joi from 'joi';
+   import { Environment } from './environment.model';
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   export const environmentSchema = Joi.object<Environment, true>({
+     NODE_ENV: Joi.string()
+       .valid('development', 'test', 'production')
+       .default('development'),
+     PORT: Joi.number().port().default(8080),
+   });
+   ```
 
-## Stay in touch
+1. Import the `EnvironmentModule` usign the `forRoot` static method and provide
+   the `Environment` class and the validation schema.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```ts
+   // app.module.ts
 
-## License
+   import { EnvironmentModule } from '@cristobalgvera/nestjs-environment';
+   import { Module } from '@nestjs/common';
+   import { Environment, environmentSchema } from './environment';
 
-Nest is [MIT licensed](LICENSE).
+   @Module({
+     imports: [
+       EnvironmentModule.forRoot({
+         environmentClass: Environment,
+         validationSchema: environmentSchema,
+       }),
+     ],
+   })
+   export class AppModule {}
+   ```
+
+1. Use the `EnvironmentService` in any place you want through DI. You need
+   to provide as generic parameter the `Environment` class previously created
+   and it will be type-safe.
+
+   ```ts
+   // test.service.ts
+
+   import { EnvironmentService } from '@cristobalgvera/nestjs-environment';
+   import { Injectable } from '@nestjs/common';
+   import { Environment } from './environment';
+
+   @Injectable()
+   export class TestService {
+     constructor(
+       private readonly environmentService: EnvironmentService<Environment>,
+     ) {}
+
+     getPort(): number {
+       const port = this.environmentService.get('PORT');
+       //     ^? const port: number
+       return port;
+     }
+   }
+   ```
+
+1. Finally, to test it, simply mock it.
+
+   ```ts
+   // test.service.spec.ts
+
+   import { TestBed } from '@automock/jest';
+   import { EnvironmentService } from '@cristobalgvera/nestjs-environment';
+   import { Environment } from './environment';
+   import { TestService } from './test.service';
+
+   describe('TestService', () => {
+     let underTest: TestService;
+     let environmentService: EnvironmentService<Environment>;
+
+     beforeEach(() => {
+       const { unit, unitRef } = TestBed.create(TestService).compile();
+
+       underTest = unit;
+       environmentService = unitRef.get(EnvironmentService);
+     });
+
+     describe('getPort', () => {
+       const environment = {
+         PORT: 1234,
+       } as Readonly<Environment>;
+
+       beforeEach(() => {
+         jest
+           .spyOn(environmentService, 'get')
+           .mockImplementation((key) => environment[key]);
+       });
+
+       it('should return the port', () => {
+         const actual = underTest.getPort();
+
+         expect(actual).toEqual(environment.PORT);
+       });
+     });
+   });
+   ```
+
+### Advance usage
+
+Following the same structure described above, you can create complex
+environment variables that can be validated. This complex types can be
+arrays or custom objects that has an inner validation too.
+
+The unique change you have to do it the following:
+
+1. Add the `ParseEnvironment` decorator to the complex types.
+
+   ```ts
+   // environment/environmen.model.ts
+
+   import {
+     BaseEnvironment,
+     ParseEnvironment,
+   } from '@cristobalgvera/nestjs-environment';
+   import { User } from './user.model';
+
+   export class Environment implements BaseEnvironment {
+     NODE_ENV: 'development' | 'test' | 'production';
+     PORT: number;
+     IS_SWAGGER_ENABLED: boolean;
+
+     @ParseEnvironment() // <-- Use this to parse arrays of primitive values
+     ALLOWED_NAMES: string[];
+
+     @ParseEnvironment({ toClass: true }) // <-- Use this to parse classes
+     USER_VALUE: User;
+
+     @ParseEnvironment({ toClass: true }) // <-- Use this to parse arrays of classes
+     USERS: User[];
+   }
+   ```
+
+1. Create the validation schema. Note the usage of a `userSchema` to validate
+   the users. This way you can easily tests separately each schema.
+
+   ```ts
+   // environment/environment.schema.ts
+
+   import * as Joi from 'joi';
+   import { Environment } from './environment.model';
+   import { userSchema } from './user.schema'; // Users can have their own schema
+
+   export const environmentSchema = Joi.object<Environment, true>({
+     NODE_ENV: Joi.string()
+       .valid('development', 'test', 'production')
+       .default('development'),
+     PORT: Joi.number().port().default(8080),
+     IS_SWAGGER_ENABLED: Joi.boolean().default(true),
+     ALLOWED_NAMES: Joi.array().items(Joi.string().required()).required(),
+     USER_VALUE: userSchema.required(),
+     USERS: Joi.array().items(userSchema).required(),
+   });
+   ```
