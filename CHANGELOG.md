@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.1.2
+
+### Patch Changes
+
+- 3c54546: Improve GitHub Actions workflow and set Changeset publish as public.
+
 ## 0.1.1
 
 ### Patch Changes
