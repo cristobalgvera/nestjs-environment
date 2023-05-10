@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
 import { parseValue } from './parse-value.util';
-import { ParseOptions } from './types';
+import { ParseEnvironmentOptions } from './types';
 
-export function Parse(options?: ParseOptions) {
+export function ParseEnvironment(options?: ParseEnvironmentOptions) {
   return Transform(parseValue, {
     toClassOnly: options?.toClass,
   });
