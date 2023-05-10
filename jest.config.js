@@ -3,18 +3,11 @@ const { compilerOptions } = require('./tsconfig');
 
 const COVERAGE_FILE_SUFFIX = [
   'service',
-  'controller',
-  'handler',
   'util',
   'provider',
   'schema',
-  'guard',
   'validation',
   'helper',
-  'interceptor',
-  'middleware',
-  'filter',
-  'pipe',
 ];
 
 /** @type {import('ts-jest/dist/types').JestConfigWithTsJest} */
@@ -27,7 +20,6 @@ module.exports = {
   },
   collectCoverageFrom: [`**/*.(${COVERAGE_FILE_SUFFIX.join('|')}).ts`],
   coverageDirectory: './coverage',
-  setupFilesAfterEnv: ['<rootDir>/test/env.setup.js'],
   testEnvironment: 'node',
   // Helps to use aliases in tsconfig (@module/*)
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
