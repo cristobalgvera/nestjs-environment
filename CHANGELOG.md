@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.1.4
+
+### Patch Changes
+
+- 285dd69: Remove actions write permissions
+
 ## 0.1.3
 
 ### Patch Changes
