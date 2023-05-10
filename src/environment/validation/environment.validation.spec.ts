@@ -1,13 +1,6 @@
-import { ClassTransformOptions, plainToInstance } from 'class-transformer';
+import { createMock } from '@golevelup/ts-jest';
 import * as Joi from 'joi';
 import * as underTest from './environment.validation';
-import { createMock } from '@golevelup/ts-jest';
-
-jest.mock('class-transformer', () => ({
-  plainToInstance: jest.fn(),
-}));
-
-const plainToInstanceMock = jest.mocked(plainToInstance);
 
 describe('EnvironmentValidation', () => {
   afterEach(() => {
@@ -15,48 +8,24 @@ describe('EnvironmentValidation', () => {
   });
 
   describe('validateEnvironment', () => {
-    let environmentSchema: Joi.ObjectSchema<any>;
-    let transformedEnvironment: Record<string, unknown>;
+    let validationSchema: Joi.ObjectSchema<any>;
 
     beforeEach(() => {
-      environmentSchema = createMock<Joi.ObjectSchema>();
-      transformedEnvironment = { id: 'id' };
+      validationSchema = createMock<Joi.ObjectSchema>();
 
-      plainToInstanceMock.mockReturnValue(transformedEnvironment);
       jest
-        .spyOn(environmentSchema, 'validate')
+        .spyOn(validationSchema, 'validate')
         .mockReturnValue({ error: undefined } as any);
-    });
-
-    it('should transform the configuration to an Environment class', () => {
-      const expectedConfig = { config: 'config' };
-      const expectedEnvironmentClass = {};
-
-      underTest.validateEnvironment(
-        expectedConfig,
-        expectedEnvironmentClass as any,
-        environmentSchema,
-      );
-
-      expect(plainToInstanceMock).toHaveBeenCalledWith(
-        expectedEnvironmentClass,
-        expectedConfig,
-        expect.objectContaining<ClassTransformOptions>({
-          enableImplicitConversion: true,
-        }),
-      );
     });
 
     it('should validate the transformed configuration against the schema', () => {
       const expected = { config: 'config' };
 
-      plainToInstanceMock.mockReturnValueOnce(expected);
+      const validationSchemaSpy = jest.spyOn(validationSchema, 'validate');
 
-      const environmentSchemaSpy = jest.spyOn(environmentSchema, 'validate');
+      underTest.validateEnvironment(expected, validationSchema);
 
-      underTest.validateEnvironment({} as any, {} as any, environmentSchema);
-
-      expect(environmentSchemaSpy).toHaveBeenCalledWith(
+      expect(validationSchemaSpy).toHaveBeenCalledWith(
         expected,
         expect.objectContaining<Joi.ValidationOptions>({
           allowUnknown: true,
@@ -67,17 +36,16 @@ describe('EnvironmentValidation', () => {
 
     describe('when the configuration is valid', () => {
       it('should return the validated configuration', () => {
-        const expected = { ...transformedEnvironment };
+        const expected = { foo: 'bar' };
 
-        jest.spyOn(environmentSchema, 'validate').mockReturnValueOnce({
+        jest.spyOn(validationSchema, 'validate').mockReturnValueOnce({
           error: undefined,
           value: expected,
         } as any);
 
         const actual = underTest.validateEnvironment(
           {} as any,
-          {} as any,
-          environmentSchema,
+          validationSchema,
         );
 
         expect(actual).toEqual(expected);
@@ -88,18 +56,16 @@ describe('EnvironmentValidation', () => {
       it('should throw an error', () => {
         expect.hasAssertions();
 
-        jest.spyOn(environmentSchema, 'validate').mockReturnValueOnce({
+        jest.spyOn(validationSchema, 'validate').mockReturnValueOnce({
           error: { message: 'validation_message' },
           value: undefined,
         } as any);
 
         expect(() =>
-          underTest.validateEnvironment(
-            {} as any,
-            {} as any,
-            environmentSchema,
-          ),
-        ).toThrowErrorMatchingInlineSnapshot(`"validation_message"`);
+          underTest.validateEnvironment({} as any, validationSchema),
+        ).toThrowErrorMatchingInlineSnapshot(
+          `"validation_message, using environment: {}"`,
+        );
       });
     });
   });

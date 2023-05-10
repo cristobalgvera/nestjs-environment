@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EnvironmentBase } from './types';
+import { BaseEnvironment } from './environment.type';
 
 @Injectable()
-export class EnvironmentService<
-  TEnvironment extends EnvironmentBase = EnvironmentBase,
-> {
+export class EnvironmentService<TEnvironment extends BaseEnvironment> {
   constructor(
     private readonly configService: ConfigService<TEnvironment, true>,
   ) {}

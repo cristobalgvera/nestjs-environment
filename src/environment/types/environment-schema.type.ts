@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
-import { EnvironmentBase } from './environment-base.type';
+import { BaseEnvironment } from '../environment.type';
 
-export type EnvironmentSchema<
-  TEnvironment extends EnvironmentBase = EnvironmentBase,
-> = Joi.ObjectSchema<TEnvironment>;
+export type EnvironmentSchema<TEnvironment extends BaseEnvironment> =
+  Joi.ObjectSchema<TEnvironment>;

@@ -1,3 +1,4 @@
 export * from './core-environment.module';
 export * from './environment.service';
-export { EnvironmentBase } from './types';
+export { BaseEnvironment } from './environment.type';
+export { validateEnvironment } from './validation';

@@ -1,9 +1,10 @@
 import { TestBed } from '@automock/jest';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentService } from './environment.service';
+import { BaseEnvironment } from './environment.type';
 
 describe('EnvironmentService', () => {
-  let underTest: EnvironmentService;
+  let underTest: EnvironmentService<BaseEnvironment>;
   let configService: ConfigService;
 
   beforeEach(() => {

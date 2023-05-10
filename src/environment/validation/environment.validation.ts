@@ -1,27 +1,21 @@
-import { plainToInstance } from 'class-transformer';
-import type {
-  EnvironmentBase,
-  EnvironmentClass,
-  EnvironmentSchema,
-} from '../types';
+import { BaseEnvironment } from '../environment.type';
+import { EnvironmentSchema } from '../types';
 
-export function validateEnvironment<
-  TEnvironemnt extends EnvironmentBase = EnvironmentBase,
->(
-  environmentValues: Record<string, unknown>,
-  EnvironmentClass: EnvironmentClass<TEnvironemnt>,
-  environmentSchema: EnvironmentSchema<TEnvironemnt>,
-): TEnvironemnt {
-  const environment = plainToInstance(EnvironmentClass, environmentValues, {
-    enableImplicitConversion: true,
-  });
-
-  const validation = environmentSchema.validate(environment, {
+export function validateEnvironment<TEnvironment extends BaseEnvironment>(
+  environment: TEnvironment,
+  validationSchema: EnvironmentSchema<TEnvironment>,
+): TEnvironment {
+  const validation = validationSchema.validate(environment, {
     allowUnknown: true,
     abortEarly: false,
   });
 
-  if (validation.error) throw new Error(validation.error.message);
+  if (validation.error)
+    throw new Error(
+      `${validation.error.message}, using environment: ${JSON.stringify(
+        environment,
+      )}`,
+    );
 
   return validation.value;
 }

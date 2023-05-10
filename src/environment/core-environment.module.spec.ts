@@ -1,7 +1,6 @@
-import { ConfigModule } from '@nestjs/config';
-import { validateEnvironment } from './validation';
-import { CoreEnvironmentModule as underTest } from './core-environment.module';
 import { DynamicModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { CoreEnvironmentModule as underTest } from './core-environment.module';
 import { EnvironmentService } from './environment.service';
 
 jest.mock('@nestjs/config', () => ({
@@ -15,7 +14,6 @@ jest.mock('./validation', () => ({
 }));
 
 const mockConfigModuleForRoot = jest.mocked(ConfigModule.forRoot);
-const mockValidateEnvironment = jest.mocked(validateEnvironment);
 
 describe('CoreEnvironmentModule', () => {
   afterEach(() => {
@@ -32,7 +30,7 @@ describe('CoreEnvironmentModule', () => {
 
       mockConfigModuleForRoot.mockReturnValueOnce(expectedConfigModule as any);
 
-      const actual = underTest.forRoot({} as any, {} as any);
+      const actual = underTest.forRoot({} as any);
 
       expect(actual).toEqual(
         expect.objectContaining<Partial<DynamicModule>>({
@@ -47,35 +45,16 @@ describe('CoreEnvironmentModule', () => {
 
     describe('when creating the ConfigModule', () => {
       it('should call ConfigModule with the proper arguments', () => {
-        underTest.forRoot({} as any, {} as any);
+        const expectedValidate = { foo: 'bar' };
+
+        underTest.forRoot({
+          validate: expectedValidate as any,
+        });
 
         expect(mockConfigModuleForRoot).toHaveBeenCalledWith({
           cache: true,
-          validate: expect.any(Function),
+          validate: expectedValidate,
         });
-      });
-
-      it('should call validateEnvironment with the proper arguments', () => {
-        const expectedEnvironmentValues = { foo: 'values' };
-        const expectedEnvironmentClass = { foo: 'class' };
-        const expectedEnvironmentSchema = { foo: 'schema' };
-
-        mockConfigModuleForRoot.mockImplementationOnce(
-          (opts) => opts?.validate?.(expectedEnvironmentValues) as any,
-        );
-
-        underTest.forRoot(
-          expectedEnvironmentClass as any,
-          expectedEnvironmentSchema as any,
-        );
-
-        expect(mockValidateEnvironment).toHaveBeenCalledWith<
-          Parameters<typeof validateEnvironment>
-        >(
-          expectedEnvironmentValues as any,
-          expectedEnvironmentClass as any,
-          expectedEnvironmentSchema as any,
-        );
       });
     });
   });
