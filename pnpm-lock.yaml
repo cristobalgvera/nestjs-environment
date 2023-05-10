@@ -3,19 +3,10 @@ lockfileVersion: '6.0'
 dependencies:
   '@nestjs/common':
     specifier: ^9.4.0
-    version: 9.4.0(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+    version: 9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
   '@nestjs/config':
     specifier: ^2.3.1
     version: 2.3.1(@nestjs/common@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-  class-transformer:
-    specifier: ^0.5.1
-    version: 0.5.1
-  joi:
-    specifier: ^17.9.2
-    version: 17.9.2
-  reflect-metadata:
-    specifier: ^0.1.13
-    version: 0.1.13
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
@@ -69,6 +60,9 @@ devDependencies:
   jest:
     specifier: 29.5.0
     version: 29.5.0(@types/node@20.1.1)(ts-node@10.9.1)
+  joi:
+    specifier: ^17.9.2
+    version: 17.9.2
   lint-staged:
     specifier: ^13.2.2
     version: 13.2.2
@@ -761,7 +755,7 @@ packages:
       {
         integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==,
       }
-    dev: false
+    dev: true
 
   /@hapi/topo@5.1.0:
     resolution:
@@ -770,7 +764,7 @@ packages:
       }
     dependencies:
       '@hapi/hoek': 9.3.0
-    dev: false
+    dev: true
 
   /@humanwhocodes/config-array@0.11.8:
     resolution:
@@ -1198,7 +1192,7 @@ packages:
       - webpack-cli
     dev: true
 
-  /@nestjs/common@9.4.0(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+  /@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1):
     resolution:
       {
         integrity: sha512-RUcVAQsEF4WPrmzFXEOUfZnPwrLTe1UVlzXTlSyfqfqbdWDPKDGlIPVelBLfc5/+RRUQ0I5iE4+CQvpCmkqldw==,
@@ -1217,7 +1211,6 @@ packages:
       class-validator:
         optional: true
     dependencies:
-      class-transformer: 0.5.1
       iterare: 1.2.1
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
@@ -1234,7 +1227,7 @@ packages:
       reflect-metadata: ^0.1.13
       rxjs: ^6.0.0 || ^7.2.0
     dependencies:
-      '@nestjs/common': 9.4.0(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common': 9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
       dotenv: 16.0.3
       dotenv-expand: 10.0.0
       lodash: 4.17.21
@@ -1264,7 +1257,7 @@ packages:
       '@nestjs/websockets':
         optional: true
     dependencies:
-      '@nestjs/common': 9.4.0(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common': 9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -1310,7 +1303,7 @@ packages:
       '@nestjs/platform-express':
         optional: true
     dependencies:
-      '@nestjs/common': 9.4.0(class-transformer@0.5.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common': 9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 9.4.0(@nestjs/common@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       tslib: 2.5.0
     dev: true
@@ -1377,21 +1370,21 @@ packages:
       }
     dependencies:
       '@hapi/hoek': 9.3.0
-    dev: false
+    dev: true
 
   /@sideway/formula@3.0.1:
     resolution:
       {
         integrity: sha512-/poHZJJVjx3L+zVD6g9KgHfYnb443oi7wLu/XKojDviHy6HOEOA6z1Trk5aR1dGcmPenJEgb2sK2I80LeS3MIg==,
       }
-    dev: false
+    dev: true
 
   /@sideway/pinpoint@2.0.0:
     resolution:
       {
         integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==,
       }
-    dev: false
+    dev: true
 
   /@sinclair/typebox@0.25.21:
     resolution:
@@ -2620,12 +2613,6 @@ packages:
         integrity: sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==,
       }
     dev: true
-
-  /class-transformer@0.5.1:
-    resolution:
-      {
-        integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==,
-      }
 
   /clean-stack@2.2.0:
     resolution:
@@ -4722,7 +4709,7 @@ packages:
       '@sideway/address': 4.1.4
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
-    dev: false
+    dev: true
 
   /js-sdsl@4.3.0:
     resolution:
