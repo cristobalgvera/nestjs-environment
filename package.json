@@ -1,6 +1,6 @@
 {
   "name": "@cristobalgvera/nestjs-environment",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
   "private": false,
   "license": "MIT",
@@ -8,6 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "prepublishOnly": "npm run build",
+    "release": "pnpm run prebuild && pnpm run build && changeset publish",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --check --ignore-unknown --write",
@@ -20,17 +21,16 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "@nestjs/common": "^9.4.0",
-    "rxjs": "^7.8.1"
-  },
   "peerDependencies": {
+    "@nestjs/common": "^9.4.0",
     "@nestjs/config": "^2.3.1",
     "class-transformer": "^0.5.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@automock/jest": "^1.0.1",
+    "@changesets/cli": "^2.26.1",
     "@golevelup/ts-jest": "^0.3.7",
     "@nestjs/cli": "^9.4.2",
     "@nestjs/schematics": "^9.1.0",
