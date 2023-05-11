@@ -1,16 +1,15 @@
 import { DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { validateEnvironment } from '@util/validation';
 import { EnvironmentModule as underTest } from './environment.module';
 import { EnvironmentService } from './environment.service';
-import { validateEnvironment } from './utils';
 
+jest.mock('@util/validation');
 jest.mock('@nestjs/config', () => ({
   ConfigModule: {
     forRoot: jest.fn(),
   },
 }));
-
-jest.mock('./utils');
 
 const mockConfigModuleForRoot = jest.mocked(ConfigModule.forRoot);
 const mockValidateEnvironment = jest.mocked(validateEnvironment);

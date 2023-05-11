@@ -1,9 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { validateEnvironment } from '@util/validation';
 import { EnvironmentService } from './environment.service';
 import { BaseEnvironment } from './environment.type';
 import { CoreEnvironmentModuleOptions } from './types';
-import { validateEnvironment } from './utils';
 
 @Module({})
 export class EnvironmentModule {

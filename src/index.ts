@@ -1,2 +1,2 @@
 export * from './decorators';
-export * from './environment';
+export * from '@lib/environment';

@@ -1,5 +1,5 @@
+import { BaseEnvironment } from '@lib/environment';
 import { plainToInstance } from 'class-transformer';
-import { BaseEnvironment } from '../environment.type';
 import { ValidateOptions } from './types';
 
 export function validateEnvironment<TEnvironment extends BaseEnvironment>({
