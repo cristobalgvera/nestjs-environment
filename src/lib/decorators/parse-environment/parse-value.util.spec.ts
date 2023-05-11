@@ -2,7 +2,6 @@ import { DetailedError } from '@util/error';
 import * as underTest from './parse-value.util';
 
 jest.mock('@util/error');
-
 const mockDetailedError = jest.mocked(DetailedError);
 
 describe('ParseValue', () => {
