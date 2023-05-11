@@ -22,12 +22,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prepare": "husky install"
   },
-  "peerDependencies": {
-    "@nestjs/common": "^9.4.0",
+  "dependencies": {
     "@nestjs/config": "^2.3.1",
-    "class-transformer": "^0.5.1",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "class-transformer": "^0.5.1"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0",
+    "reflect-metadata": "^0.1.0",
+    "rxjs": "^7.0.0"
   },
   "devDependencies": {
     "@automock/jest": "^1.0.1",
