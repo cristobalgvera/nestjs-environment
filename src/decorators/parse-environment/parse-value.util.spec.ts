@@ -19,11 +19,15 @@ describe('ParseValue', () => {
       const key = 'foo';
       const value = '{ invalid: JSON';
 
-      expect(() =>
-        underTest.parseValue({ value, key } as any),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"Unable to parse JSON value for key: foo"`,
-      );
+      expect(() => underTest.parseValue({ value, key } as any))
+        .toThrowErrorMatchingInlineSnapshot(`
+        "------------------------
+        Unable to parse JSON value
+
+        Key: 'foo'
+        Value: '{ invalid: JSON'
+        ------------------------"
+      `);
     });
   });
 });
