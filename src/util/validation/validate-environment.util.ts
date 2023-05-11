@@ -1,5 +1,6 @@
+import { BaseEnvironment } from '@lib/environment';
+import { DetailedError } from '@util/error';
 import { plainToInstance } from 'class-transformer';
-import { BaseEnvironment } from '../environment.type';
 import { ValidateOptions } from './types';
 
 export function validateEnvironment<TEnvironment extends BaseEnvironment>({
@@ -14,12 +15,7 @@ export function validateEnvironment<TEnvironment extends BaseEnvironment>({
     abortEarly: false,
   });
 
-  if (validation.error)
-    throw new Error(
-      `${validation.error.message}, using environment: ${JSON.stringify(
-        environment,
-      )}`,
-    );
+  if (validation.error) throw new DetailedError(validation.error.message);
 
   return validation.value;
 }

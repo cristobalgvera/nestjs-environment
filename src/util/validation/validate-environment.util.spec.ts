@@ -1,13 +1,14 @@
 import { createMock } from '@golevelup/ts-jest';
+import { DetailedError } from '@util/error';
 import { plainToInstance } from 'class-transformer';
 import * as Joi from 'joi';
 import * as underTest from './validate-environment.util';
 
-jest.mock('class-transformer', () => ({
-  plainToInstance: jest.fn(),
-}));
+jest.mock('class-transformer');
+jest.mock('@util/error');
 
 const mockPlainToInstance = jest.mocked(plainToInstance);
+const mockDetailedError = jest.mocked(DetailedError);
 
 describe('ValidateEnvironment', () => {
   let validationSchema: Joi.ObjectSchema<any>;
@@ -73,19 +74,42 @@ describe('ValidateEnvironment', () => {
   });
 
   describe('when the configuration is invalid', () => {
+    beforeEach(() => {
+      mockDetailedError.mockImplementation(() => {
+        throw new Error('DetailedError');
+      });
+    });
+
     it('should throw an error', () => {
       expect.hasAssertions();
 
       jest.spyOn(validationSchema, 'validate').mockReturnValueOnce({
-        error: { message: 'validation_message' },
-        value: undefined,
+        error: {},
       } as any);
 
       expect(() =>
         underTest.validateEnvironment({ validationSchema } as any),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"validation_message, using environment: undefined"`,
-      );
+      ).toThrowErrorMatchingInlineSnapshot(`"DetailedError"`);
+    });
+
+    it('should instantiate DetailedError using the correct parameters', () => {
+      expect.hasAssertions();
+
+      const expected = 'validation_message';
+
+      jest.spyOn(validationSchema, 'validate').mockReturnValueOnce({
+        error: { message: expected },
+      } as any);
+
+      try {
+        underTest.validateEnvironment({ validationSchema } as any);
+      } catch (error) {
+        // Ignore the error
+      } finally {
+        expect(mockDetailedError).toHaveBeenCalledWith<
+          ConstructorParameters<typeof DetailedError>
+        >(expect.stringMatching(expected));
+      }
     });
   });
 });

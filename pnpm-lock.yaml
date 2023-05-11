@@ -10,6 +10,9 @@ dependencies:
   class-transformer:
     specifier: ^0.5.1
     version: 0.5.1
+  joi:
+    specifier: ^17.0.0
+    version: 17.9.2
   reflect-metadata:
     specifier: ^0.1.0
     version: 0.1.13
@@ -69,9 +72,6 @@ devDependencies:
   jest:
     specifier: 29.5.0
     version: 29.5.0(@types/node@20.1.1)(ts-node@10.9.1)
-  joi:
-    specifier: ^17.9.2
-    version: 17.9.2
   lint-staged:
     specifier: ^13.2.2
     version: 13.2.2
@@ -1009,7 +1009,7 @@ packages:
       {
         integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==,
       }
-    dev: true
+    dev: false
 
   /@hapi/topo@5.1.0:
     resolution:
@@ -1018,7 +1018,7 @@ packages:
       }
     dependencies:
       '@hapi/hoek': 9.3.0
-    dev: true
+    dev: false
 
   /@humanwhocodes/config-array@0.11.8:
     resolution:
@@ -1651,21 +1651,21 @@ packages:
       }
     dependencies:
       '@hapi/hoek': 9.3.0
-    dev: true
+    dev: false
 
   /@sideway/formula@3.0.1:
     resolution:
       {
         integrity: sha512-/poHZJJVjx3L+zVD6g9KgHfYnb443oi7wLu/XKojDviHy6HOEOA6z1Trk5aR1dGcmPenJEgb2sK2I80LeS3MIg==,
       }
-    dev: true
+    dev: false
 
   /@sideway/pinpoint@2.0.0:
     resolution:
       {
         integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==,
       }
-    dev: true
+    dev: false
 
   /@sinclair/typebox@0.25.21:
     resolution:
@@ -5646,7 +5646,7 @@ packages:
       '@sideway/address': 4.1.4
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
-    dev: true
+    dev: false
 
   /js-sdsl@4.3.0:
     resolution:
