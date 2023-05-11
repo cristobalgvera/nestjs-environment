@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.1.5
+
+### Patch Changes
+
+- 4e02c98: Set proper depenedencies and peer dependencies
+
 ## 0.1.4
 
 ### Patch Changes
