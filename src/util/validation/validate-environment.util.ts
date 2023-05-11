@@ -1,4 +1,5 @@
 import { BaseEnvironment } from '@lib/environment';
+import { DetailedError } from '@util/error';
 import { plainToInstance } from 'class-transformer';
 import { ValidateOptions } from './types';
 
@@ -14,7 +15,7 @@ export function validateEnvironment<TEnvironment extends BaseEnvironment>({
     abortEarly: false,
   });
 
-  if (validation.error) throw new Error(`${validation.error.message}`);
+  if (validation.error) throw new DetailedError(validation.error.message);
 
   return validation.value;
 }

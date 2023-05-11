@@ -46,7 +46,9 @@ describe('ParseValue', () => {
       } catch (error) {
         // Ignore the error
       } finally {
-        expect(mockDetailedError).toHaveBeenCalledWith(
+        expect(mockDetailedError).toHaveBeenCalledWith<
+          ConstructorParameters<typeof DetailedError>
+        >(
           expect.arrayContaining([
             expect.stringMatching(key),
             expect.stringMatching(value),
