@@ -1,5 +1,17 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.2.0
+
+### Minor Changes
+
+- c947364: Add Joi v17+ to peer dependencies
+
+### Patch Changes
+
+- 34b972b: Print a clean message if validation fails
+- f460e21: Print a clean message if JSON parse fails
+- 93f8fe3: Remove the logging of the current used environment if the validation fails
+
 ## 0.1.5
 
 ### Patch Changes
