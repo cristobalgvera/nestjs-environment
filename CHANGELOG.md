@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.2.1
+
+### Patch Changes
+
+- bfd6cb9: Fix erroneous definition of public exports
+
 ## 0.2.0
 
 ### Minor Changes
