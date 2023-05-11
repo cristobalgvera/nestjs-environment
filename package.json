@@ -1,6 +1,6 @@
 {
   "name": "@cristobalgvera/nestjs-environment",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Cristóbal Gajardo Vera <cristobalgajardo.v@gmail.com>",
   "description": "Environment module configuration library that allows you to easily setup and validate your environment with minimal configuration.",
   "private": false,
