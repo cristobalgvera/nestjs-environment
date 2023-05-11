@@ -14,12 +14,7 @@ export function validateEnvironment<TEnvironment extends BaseEnvironment>({
     abortEarly: false,
   });
 
-  if (validation.error)
-    throw new Error(
-      `${validation.error.message}, using environment: ${JSON.stringify(
-        environment,
-      )}`,
-    );
+  if (validation.error) throw new Error(`${validation.error.message}`);
 
   return validation.value;
 }

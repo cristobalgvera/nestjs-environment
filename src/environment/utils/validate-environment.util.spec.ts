@@ -3,10 +3,7 @@ import { plainToInstance } from 'class-transformer';
 import * as Joi from 'joi';
 import * as underTest from './validate-environment.util';
 
-jest.mock('class-transformer', () => ({
-  plainToInstance: jest.fn(),
-}));
-
+jest.mock('class-transformer');
 const mockPlainToInstance = jest.mocked(plainToInstance);
 
 describe('ValidateEnvironment', () => {
@@ -83,9 +80,7 @@ describe('ValidateEnvironment', () => {
 
       expect(() =>
         underTest.validateEnvironment({ validationSchema } as any),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"validation_message, using environment: undefined"`,
-      );
+      ).toThrowErrorMatchingInlineSnapshot(`"validation_message"`);
     });
   });
 });
