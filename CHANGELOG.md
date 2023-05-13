@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.2.2
+
+### Patch Changes
+
+- 316543b: Remove PORT from base environment interface.
+
 ## 0.2.1
 
 ### Patch Changes
