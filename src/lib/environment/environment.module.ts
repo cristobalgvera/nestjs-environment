@@ -3,12 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { validateEnvironment } from '@util/validation';
 import { EnvironmentService } from './environment.service';
 import { BaseEnvironment } from './environment.type';
-import { CoreEnvironmentModuleOptions } from './types';
+import { EnvironmentModuleOptions } from './types';
 
 @Module({})
 export class EnvironmentModule {
   static forRoot<TEnvironment extends BaseEnvironment>(
-    options: CoreEnvironmentModuleOptions<TEnvironment>,
+    options: EnvironmentModuleOptions<TEnvironment>,
   ): DynamicModule {
     const { environmentClass, validationSchema } = options;
 
