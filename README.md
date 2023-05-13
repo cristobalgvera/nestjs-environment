@@ -18,6 +18,14 @@ and validate your environment with minimal configuration.
 npm install @cristobalgvera/nestjs-environment
 ```
 
+By the moment, the unique accepted source of validation is `Joi` (there are
+plans to expand to any source of validation like `Zod`), so, you have to
+install it too.
+
+```bash
+npm install joi
+```
+
 ## Usage
 
 The most basic usage possible is the following:
@@ -30,8 +38,7 @@ The most basic usage possible is the following:
    import { BaseEnvironment } from '@cristobalgvera/nestjs-environment';
 
    export class Environment implements BaseEnvironment {
-     NODE_ENV: string;
-     PORT: number;
+     NODE_ENV: string; // or 'development' | 'test' | 'production'
    }
    ```
 
@@ -45,14 +52,11 @@ The most basic usage possible is the following:
    import { Environment } from './environment.model';
 
    export const environmentSchema = Joi.object<Environment, true>({
-     NODE_ENV: Joi.string()
-       .valid('development', 'test', 'production')
-       .default('development'),
-     PORT: Joi.number().port().default(8080),
+     NODE_ENV: Joi.string().default('development'),
    });
    ```
 
-1. Import the `EnvironmentModule` usign the `forRoot` static method and provide
+1. Import the `EnvironmentModule` using the `forRoot` static method and provide
    the `Environment` class and the validation schema.
 
    ```ts
@@ -90,10 +94,10 @@ The most basic usage possible is the following:
        private readonly environmentService: EnvironmentService<Environment>,
      ) {}
 
-     getPort(): number {
-       const port = this.environmentService.get('PORT');
-       //     ^? const port: number
-       return port;
+     getNodeEnvironment(): string {
+       const NODE_ENV = this.environmentService.get('NODE_ENV');
+       //        ^? const NODE_ENV: string
+       return NODE_ENV;
      }
    }
    ```
@@ -119,9 +123,9 @@ The most basic usage possible is the following:
        environmentService = unitRef.get(EnvironmentService);
      });
 
-     describe('getPort', () => {
+     describe('getNodeEnvironment', () => {
        const environment = {
-         PORT: 1234,
+         NODE_ENV: 'development',
        } as Readonly<Environment>;
 
        beforeEach(() => {
@@ -130,10 +134,12 @@ The most basic usage possible is the following:
            .mockImplementation((key) => environment[key]);
        });
 
-       it('should return the port', () => {
-         const actual = underTest.getPort();
+       it('should return the node environment', () => {
+         const expected = environment.NODE_ENV;
 
-         expect(actual).toEqual(environment.PORT);
+         const actual = underTest.getNodeEnvironment();
+
+         expect(actual).toEqual(expected);
        });
      });
    });
@@ -150,7 +156,7 @@ The unique change you have to do it the following:
 1. Add the `ParseEnvironment` decorator to the complex types.
 
    ```ts
-   // environment/environmen.model.ts
+   // environment/environment.model.ts
 
    import {
      BaseEnvironment,
@@ -164,18 +170,18 @@ The unique change you have to do it the following:
      IS_SWAGGER_ENABLED: boolean;
 
      @ParseEnvironment() // <-- Use this to parse arrays of primitive values
-     ALLOWED_NAMES: string[];
+     ALLOWED_IPS: string[];
 
      @ParseEnvironment({ toClass: true }) // <-- Use this to parse classes
-     USER_VALUE: User;
+     INTERNAL_USER: User;
 
      @ParseEnvironment({ toClass: true }) // <-- Use this to parse arrays of classes
-     USERS: User[];
+     EXTERNAL_USERS: User[];
    }
    ```
 
 1. Create the validation schema. Note the usage of a `userSchema` to validate
-   the users. This way you can easily tests separately each schema.
+   the users. This way you can easily test each schema separately.
 
    ```ts
    // environment/environment.schema.ts
@@ -190,8 +196,8 @@ The unique change you have to do it the following:
        .default('development'),
      PORT: Joi.number().port().default(8080),
      IS_SWAGGER_ENABLED: Joi.boolean().default(true),
-     ALLOWED_NAMES: Joi.array().items(Joi.string().required()).required(),
-     USER_VALUE: userSchema.required(),
-     USERS: Joi.array().items(userSchema).required(),
+     ALLOWED_IPS: Joi.array().items(Joi.string().ip()).required(),
+     INTERNAL_USER: userSchema.required(),
+     EXTERNAL_USERS: Joi.array().items(userSchema).required(),
    });
    ```
