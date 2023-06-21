@@ -1,5 +1,11 @@
 # @cristobalgvera/nestjs-environment
 
+## 0.2.3
+
+### Patch Changes
+
+- 4d91c4c: Update dependencies
+
 ## 0.2.2
 
 ### Patch Changes
